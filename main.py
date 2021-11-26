@@ -5,15 +5,12 @@ Udayraj Deshmukh
 https://github.com/Udayraj123
 
 """
-
 import re
 import os
 import cv2
 import argparse
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
-import imutils
 
 import config
 import utils
@@ -25,15 +22,12 @@ filesNotMoved=0
 
 from glob import glob
 from csv import QUOTE_NONNUMERIC
-from time import localtime, strftime, time
-
-
-# TODO(beginner task) :-
-# from colorama import init
-# init()
-# from colorama import Fore, Back, Style
+from time import time
 
 def process_dir(root_dir, subdir, template):
+    # root_dir = 'inputs'
+    # subdir = ''
+    # template = args['template']
     curr_dir = os.path.join(root_dir, subdir)
 
     # Look for template in current dir
@@ -42,14 +36,14 @@ def process_dir(root_dir, subdir, template):
         template = Template(template_file)
 
     # look for images in current dir to process
-    paths = config.Paths(os.path.join(args['output_dir'], subdir))   
+    paths = config.Paths(os.path.join(args['output_dir'], subdir))
     exts = ('*.png', '*.jpg', '*.jpeg')
     omr_files = sorted(
         [f for ext in exts for f in glob(os.path.join(curr_dir, ext))])
 
     # Exclude marker image if exists
-    if(template and template.marker_path):
-        omr_files = [f for f in omr_files if f != template.marker_path]
+    # if(template and template.marker_path):
+    #     omr_files = [f for f in omr_files if f != template.marker_path]
 
     subfolders = sorted([file for file in os.listdir(
         curr_dir) if os.path.isdir(os.path.join(curr_dir, file))])
@@ -67,21 +61,23 @@ def process_dir(root_dir, subdir, template):
               if(template.marker is not None) else "N/A")
         print('')
 
-        if not template:
-            print(f'Error: No template file when processing {curr_dir}.')
-            print(f'  Place {config.TEMPLATE_FILE} in the directory or specify a template using -t.')
-            return
+        # if not template:
+        #     print(f'Error: No template file when processing {curr_dir}.')
+        #     print(f'  Place {config.TEMPLATE_FILE} in the directory or specify a template using -t.')
+        #     return
 
         utils.setup_dirs(paths)
         output_set = setup_output(paths, template)
-        process_files(omr_files, template, args_local, output_set)
-    elif(len(subfolders) == 0):
-        # the directory should have images or be non-leaf
-        print(f'Note: No valid images or subfolders found in {curr_dir}')
-
-    # recursively process subfolders
+        temp_out = process_files(omr_files, template, args_local, output_set)
+        return temp_out
+    # elif(len(subfolders) == 0):
+    #     # the directory should have images or be non-leaf
+    #     print(f'Note: No valid images or subfolders found in {curr_dir}')
+    #
+    # # recursively process subfolders
     for folder in subfolders:
-        process_dir(root_dir, os.path.join(subdir, folder), template)
+        var_temp = process_dir(root_dir, os.path.join(subdir, folder), template)
+        return var_temp
 
 
 def checkAndMove(error_code, filepath, filepath2):
@@ -110,14 +106,12 @@ def processOMR(template, omrResp):
     csvResp = {}
 
     # symbol for absent response
-    UNMARKED_SYMBOL = ''
-
-    # print("omrResp",omrResp)
+    UNMARKED_SYMBOL = ' '
 
     # Multi-column/multi-row questions which need to be concatenated
     for qNo, respKeys in template.concats.items():
         csvResp[qNo] = ''.join([omrResp.get(k, UNMARKED_SYMBOL)
-                                for k in respKeys])
+                                for k in respKeys]).strip()
 
     # Single-column/single-row questions
     for qNo in template.singles:
@@ -248,10 +242,10 @@ def setup_output(paths, template):
     ns.OUTPUT_SET = []
     ns.filesObj = {}
     ns.filesMap = {
-        "Results": paths.resultDir + 'Results_' + timeNowHrs + '.csv',
-        "MultiMarked": paths.manualDir + 'MultiMarkedFiles_.csv',
-        "Errors": paths.manualDir + 'ErrorFiles_.csv',
-        "BadRollNos": paths.manualDir + 'BadRollNoFiles_.csv'
+        "Results": paths.resultDir + 'Results.csv'
+        # "MultiMarked": paths.manualDir + 'MultiMarkedFiles_.csv',
+        # "Errors": paths.manualDir + 'ErrorFiles_.csv',
+        # "BadRollNos": paths.manualDir + 'BadRollNoFiles_.csv'
     }
 
     for fileKey, fileName in ns.filesMap.items():
@@ -357,54 +351,56 @@ def process_files(omr_files, template, args, out):
                          savedir=savedir, autoAlign=args["autoAlign"])
 
         # concatenate roll nos, set unmarked responses, etc
+        # Required JSON
         resp = processOMR(template, OMRresponseDict)
-        print("\nRead Response: \t", resp)
+        # print("\nRead Response: \t", resp)
+        return resp
 
         #This evaluates and returns the score attribute
         # TODO: Automatic scoring
         #score = evaluate(resp, explain=explain)
-        score = 0
-        
-        respArray=[]
-        for k in out.respCols:
-            respArray.append(resp[k])
-
-        out.OUTPUT_SET.append([filename] + respArray)
-
-        # TODO: Add roll number validation here
-        if(MultiMarked == 0):
-            filesNotMoved += 1
-            newfilepath = savedir + file_id
-            # Enter into Results sheet-
-            results_line = [filename, filepath, newfilepath, score] + respArray
-            # Write/Append to results_line file(opened in append mode)
-            pd.DataFrame(
-                results_line,
-                dtype=str).T.to_csv(
-                out.filesObj["Results"],
-                quoting=QUOTE_NONNUMERIC,
-                header=False,
-                index=False)
-            print("[%d] Graded with score: %.2f" %
-                  (filesCounter, score), '\t file_id: ', file_id)
+        # score = 0
+        #
+        # respArray=[]
+        # for k in out.respCols:
+        #     respArray.append(resp[k])
+        #
+        # out.OUTPUT_SET.append([filename] + respArray)
+        #
+        # # TODO: Add roll number validation here
+        # # if(MultiMarked == 0):
+        # filesNotMoved += 1
+        newfilepath = savedir + file_id
+        # # Enter into Results sheet-
+        results_line = [filename, filepath, newfilepath, score] + respArray
+        # Write/Append to results_line file(opened in append mode)
+        pd.DataFrame(
+            results_line,
+            dtype=str).T.to_csv(
+            out.filesObj["Results"],
+            quoting=QUOTE_NONNUMERIC,
+            header=False,
+            index=False)
+        # print("[%d] Graded with score: %.2f" %
+        #       (filesCounter, score), '\t file_id: ', file_id)
             # print(filesCounter,file_id,resp['Roll'],'score : ',score)
-        else:
-            # MultiMarked file
-            print('[%d] MultiMarked, moving File: %s' %
-                  (filesCounter, file_id))
-            newfilepath = out.paths.multiMarkedDir + filename
-            if(checkAndMove(config.MULTI_BUBBLE_WARN, filepath, newfilepath)):
-                mm_line = [filename, filepath, newfilepath, "NA"] + respArray
-                pd.DataFrame(
-                    mm_line,
-                    dtype=str).T.to_csv(
-                    out.filesObj["MultiMarked"],
-                    quoting=QUOTE_NONNUMERIC,
-                    header=False,
-                    index=False)
-            # else:
-            #     TODO:  Add appropriate record handling here
-            #     pass
+        # else:
+        #     # MultiMarked file
+        #     print('[%d] MultiMarked, moving File: %s' %
+        #           (filesCounter, file_id))
+        #     newfilepath = out.paths.multiMarkedDir + filename
+        #     if(checkAndMove(config.MULTI_BUBBLE_WARN, filepath, newfilepath)):
+        #         mm_line = [filename, filepath, newfilepath, "NA"] + respArray
+        #         pd.DataFrame(
+        #             mm_line,
+        #             dtype=str).T.to_csv(
+        #             out.filesObj["MultiMarked"],
+        #             quoting=QUOTE_NONNUMERIC,
+        #             header=False,
+        #             index=False)
+        #     # else:
+        #     #     TODO:  Add appropriate record handling here
+        #     #     pass
 
         # flush after every 20 files for a live view
         if(filesCounter % 20 == 0 or filesCounter == len(omr_files)):
@@ -423,35 +419,35 @@ def process_files(omr_files, template, args, out):
              filesMoved +
              filesNotMoved) else 'Not Tallying!'))
 
-    if(config.showimglvl <= 0):
-        print(
-            '\nFinished Checking %d files in %.1f seconds i.e. ~%.1f minutes.' %
-            (filesCounter, timeChecking, timeChecking / 60))
-        print('OMR Processing Rate  :\t ~ %.2f seconds/OMR' %
-              (timeChecking / filesCounter))
-        print('OMR Processing Speed :\t ~ %.2f OMRs/minute' %
-              ((filesCounter * 60) / timeChecking))
-    else:
-        print("\nTotal script time :", timeChecking, "seconds")
+    # if(config.showimglvl <= 0):
+    #     print(
+    #         '\nFinished Checking %d files in %.1f seconds i.e. ~%.1f minutes.' %
+    #         (filesCounter, timeChecking, timeChecking / 60))
+    #     print('OMR Processing Rate  :\t ~ %.2f seconds/OMR' %
+    #           (timeChecking / filesCounter))
+    #     print('OMR Processing Speed :\t ~ %.2f OMRs/minute' %
+    #           ((filesCounter * 60) / timeChecking))
+    # else:
+    #     print("\nTotal script time :", timeChecking, "seconds")
 
-    if(config.showimglvl <= 1):
-        # TODO: colorama this
-        print(
-            "\nTip: To see some awesome visuals, open globals.py and increase 'showimglvl'")
+    # if(config.showimglvl <= 1):
+    #     # TODO: colorama this
+    #     print(
+    #         "\nTip: To see some awesome visuals, open globals.py and increase 'showimglvl'")
 
     #evaluate_correctness(template, out)
 
     # Use this data to train as +ve feedback
-    if config.showimglvl >= 0 and filesCounter > 10:
-        for x in [utils.thresholdCircles]:#,badThresholds,veryBadPoints, mws, mbs]:
-            if(x != []):
-                x = pd.DataFrame(x)
-                print(x.describe())
-                plt.plot(range(len(x)), x)
-                plt.title("Mystery Plot")
-                plt.show()
-            else:
-                print(x)
+    # if config.showimglvl >= 0 and filesCounter > 10:
+    #     for x in [utils.thresholdCircles]:#,badThresholds,veryBadPoints, mws, mbs]:
+    #         if(x != []):
+    #             x = pd.DataFrame(x)
+    #             print(x.describe())
+    #             plt.plot(range(len(x)), x)
+    #             plt.title("Mystery Plot")
+    #             plt.show()
+    #         else:
+    #             print(x)
 
 
 # Evaluate accuracy based on OMRDataset file generated through moderation
@@ -496,8 +492,6 @@ def evaluate_correctness(template, out):
                   list(x_df.index.difference(intersection)))
 
 
-timeNowHrs = strftime("%I%p", localtime())
-
 # construct the argument parse and parse the arguments
 argparser = argparse.ArgumentParser()
 # https://docs.python.org/3/howto/argparse.html
@@ -506,7 +500,7 @@ argparser = argparse.ArgumentParser()
 argparser.add_argument(
     "-c",
     "--noCropping",
-    required=False,
+    required=True,
     dest='noCropping',
     action='store_true',
     help="Disables page contour detection - used when page boundary is not visible e.g. document scanner.")
@@ -549,5 +543,5 @@ if args['template']:
 if args['input_dir'] is None:
     args['input_dir'] = ['inputs']
 
-for root in args['input_dir']:
-    process_dir(root, '', args['template'])
+# for root in args['input_dir']:
+#     process_dir(root, '', args['template'])

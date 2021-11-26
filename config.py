@@ -82,8 +82,8 @@ class Paths:
         self.output = output
         self.saveMarkedDir = f'{output}/CheckedOMRs/'
         self.resultDir = f'{output}/Results/'
-        self.manualDir = f'{output}/Manual/'
-        self.errorsDir = f'{self.manualDir}ErrorFiles/'
-        self.badRollsDir = f'{self.manualDir}BadRollNosFiles/'
-        self.multiMarkedDir = f'{self.manualDir}MultiMarkedFiles/'
+        # self.manualDir = f'{output}/Manual/'
+        # self.errorsDir = f'{self.manualDir}ErrorFiles/'
+        # self.badRollsDir = f'{self.manualDir}BadRollNosFiles/'
+        # self.multiMarkedDir = f'{self.manualDir}MultiMarkedFiles/'
 

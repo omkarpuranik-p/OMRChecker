@@ -6,6 +6,8 @@ https://github.com/Udayraj123
 
 """
 # Locals
+import json
+
 saveImgList = {}
 resetpos = [0,0]
 # for positioning image windows
@@ -31,38 +33,38 @@ import template
 
 def setup_dirs(paths):
     print('\nChecking Directories...')
-    for _dir in [paths.saveMarkedDir]:
-        if(not os.path.exists(_dir)):
-            print('Created : ' + _dir)
-            os.makedirs(_dir)
-            os.mkdir(_dir + '/stack')
-            os.mkdir(_dir + '/_MULTI_')
-            os.mkdir(_dir + '/_MULTI_' + '/stack')
-            # os.mkdir(_dir+sl+'/_BADSCAN_')
-            # os.mkdir(_dir+sl+'/_BADSCAN_'+'/stack')
-        else:
-            print('Present : ' + _dir)
+    # for _dir in [paths.saveMarkedDir]:
+    #     if(not os.path.exists(_dir)):
+    #         print('Created : ' + _dir)
+    #         os.makedirs(_dir)
+    #         os.mkdir(_dir + '/stack')
+    #         os.mkdir(_dir + '/_MULTI_')
+    #         os.mkdir(_dir + '/_MULTI_' + '/stack')
+    #         # os.mkdir(_dir+sl+'/_BADSCAN_')
+    #         # os.mkdir(_dir+sl+'/_BADSCAN_'+'/stack')
+    #     else:
+    #         print('Present : ' + _dir)
 
-    for _dir in [paths.manualDir, paths.resultDir]:
-        if(not os.path.exists(_dir)):
-            print('Created : ' + _dir)
-            os.makedirs(_dir)
-        else:
-            print('Present : ' + _dir)
-
-    for _dir in [paths.multiMarkedDir, paths.errorsDir, paths.badRollsDir]:
+    for _dir in [paths.resultDir]:
         if(not os.path.exists(_dir)):
             print('Created : ' + _dir)
             os.makedirs(_dir)
         else:
             print('Present : ' + _dir)
 
+    # for _dir in [paths.multiMarkedDir, paths.errorsDir, paths.badRollsDir]:
+    #     if(not os.path.exists(_dir)):
+    #         print('Created : ' + _dir)
+    #         os.makedirs(_dir)
+    #     else:
+    #         print('Present : ' + _dir)
 
-def waitQ():
-    ESC_KEY = 27
-    while(cv2.waitKey(1) & 0xFF not in [ord('q'), ESC_KEY]):
-        pass
-    cv2.destroyAllWindows()
+
+# def waitQ():
+#     ESC_KEY = 27
+#     while(cv2.waitKey(1) & 0xFF not in [ord('q'), ESC_KEY]):
+#         pass
+#     cv2.destroyAllWindows()
 
 
 def normalize_util(img, alpha=0, beta=255):
@@ -127,7 +129,7 @@ def show(name, orig, pause=1, resize=False, resetpos=None):
             "Showing '" +
             name +
             "'\n\tPress Q on image to continue Press Ctrl + C in terminal to exit")
-        waitQ()
+        # waitQ()
 
 
 def putLabel(img, label, size):
@@ -820,7 +822,7 @@ def saveImg(path, final_marked):
     cv2.imwrite(path, final_marked)
 
 
-def readResponse(template, image, name, savedir=None, autoAlign=False):
+def readResponse(template, image, name, savedir=None, autoAlign=True):
     global clahe
 
     try:
@@ -1155,10 +1157,10 @@ def readResponse(template, image, name, savedir=None, autoAlign=False):
             plt.tight_layout(pad=0.5)
             plt.show()
 
-        if(config.showimglvl >= 3 and final_align is not None):
-            final_align = resize_util_h(final_align, int(config.display_height))
-            # [final_align.shape[1],0])
-            show("Template Alignment Adjustment", final_align, 0, 0)
+        # if(config.showimglvl >= 3 and final_align is not None):
+        #     final_align = resize_util_h(final_align, int(config.display_height))
+        #     # [final_align.shape[1],0])
+        #     show("Template Alignment Adjustment", final_align, 0, 0)
 
         # TODO: refactor "type(savedir) != type(None) "
         if (config.saveMarked and type(savedir) != type(None)):
@@ -1166,14 +1168,14 @@ def readResponse(template, image, name, savedir=None, autoAlign=False):
                 savedir = savedir + '_MULTI_/'
             saveImg(savedir + name, final_marked)
 
-        if(config.showimglvl >= 1):
-            show("Final Marked Bubbles : " + name,
-                 resize_util_h(final_marked, int(config.display_height * 1.3)), 1, 1)
+        # if(config.showimglvl >= 1):
+        #     show("Final Marked Bubbles : " + name,
+        #          resize_util_h(final_marked, int(config.display_height * 1.3)), 1, 1)
 
         appendSaveImg(2, final_marked)
-
-        for i in range(config.saveimglvl):
-            saveOrShowStacks(i + 1, name, savedir)
+        #
+        # for i in range(config.saveimglvl):
+        #     saveOrShowStacks(i + 1, name, savedir)
 
         return OMRresponse, final_marked, multimarked, multiroll
 
@@ -1184,15 +1186,15 @@ def readResponse(template, image, name, savedir=None, autoAlign=False):
         print(exc_type, fname, exc_tb.tb_lineno)
 
 
-def saveOrShowStacks(key, name, savedir=None, pause=1):
-    global saveImgList
-    if(config.saveimglvl >= int(key) and saveImgList[key] != []):
-        result = np.hstack(
-            tuple([resize_util_h(img, config.uniform_height) for img in saveImgList[key]]))
-        result = resize_util(result,
-                             min(len(saveImgList[key]) * config.uniform_width // 3,
-                                 int(config.uniform_width * 2.5)))
-        if (type(savedir) != type(None)):
-            saveImg(savedir+'stack/'+name+'_'+str(key)+'_stack.jpg', result)
-        else:
-            show(name + '_' + str(key), result, pause, 0)
+# def saveOrShowStacks(key, name, savedir=None, pause=1):
+#     global saveImgList
+#     if(config.saveimglvl >= int(key) and saveImgList[key] != []):
+#         result = np.hstack(
+#             tuple([resize_util_h(img, config.uniform_height) for img in saveImgList[key]]))
+#         result = resize_util(result,
+#                              min(len(saveImgList[key]) * config.uniform_width // 3,
+#                                  int(config.uniform_width * 2.5)))
+#         if (type(savedir) != type(None)):
+#             saveImg(savedir+'stack/'+name+'_'+str(key)+'_stack.jpg', result)
+#         else:
+#             show(name + '_' + str(key), result, pause, 0)

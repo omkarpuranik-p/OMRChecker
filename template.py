@@ -73,6 +73,23 @@ qtype_data = {
         'vals': ['A', 'B', 'C', 'D', 'E'],
         'orient': 'H'
     },
+    'QTYPE_NAME': {
+        'vals': ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'],
+        'orient': 'V'
+    },
+    'QTYPE_STUDENT_ID': {
+        'vals': range(10),
+        'orient': 'V'
+    },
+    'QTYPE_TEST_ID': {
+        'vals': range(10),
+        'orient': 'V'
+    },
+    'QTYPE_MOBILE_NUMBER': {
+        'vals': range(10),
+        'orient': 'V'
+    },
+
     # Add custom question types here-
     # ,
     # 'QTYPE_MCQ_COL_5A':{'vals' : ['A']*5, 'orient':'V'},
