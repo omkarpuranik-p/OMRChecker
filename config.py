@@ -11,8 +11,8 @@ Constants
 """
 display_height = int(640)
 display_width = int(640)
-windowWidth = 1280
-windowHeight = 720
+windowWidth = 1250
+windowHeight = 780
 
 saveMarked = 1
 saveCropped = 1
@@ -39,7 +39,7 @@ ERODE_SUB_OFF = 1
 
 # For new ways of determining threshold
 MIN_GAP, MIN_STD = 30, 25
-MIN_JUMP = 25
+MIN_JUMP = 15
 # If only not confident, take help of globalTHR
 CONFIDENT_JUMP = MIN_JUMP + 15
 JUMP_DELTA = 30

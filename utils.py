@@ -60,11 +60,11 @@ def setup_dirs(paths):
     #         print('Present : ' + _dir)
 
 
-# def waitQ():
-#     ESC_KEY = 27
-#     while(cv2.waitKey(1) & 0xFF not in [ord('q'), ESC_KEY]):
-#         pass
-#     cv2.destroyAllWindows()
+def waitQ():
+    ESC_KEY = 27
+    while(cv2.waitKey(1) & 0xFF not in [ord('q'), ESC_KEY]):
+        pass
+    cv2.destroyAllWindows()
 
 
 def normalize_util(img, alpha=0, beta=255):
@@ -102,7 +102,7 @@ def show(name, orig, pause=1, resize=False, resetpos=None):
             cv2.destroyAllWindows()
         return
     origDim = orig.shape[:2]
-    img = resize_util(orig, config.display_width, config.display_height) if resize else orig
+    img = resize_util(orig, config.display_width + 95, config.display_height + 150) if resize else orig
     cv2.imshow(name, img)
     if(resetpos):
         windowX = resetpos[0]
