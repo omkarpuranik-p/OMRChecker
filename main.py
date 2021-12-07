@@ -24,7 +24,7 @@ from glob import glob
 from csv import QUOTE_NONNUMERIC
 from time import time
 
-def process_dir(root_dir, subdir, template):
+def process_dir(root_dir, subdir, template, test_img):
     # root_dir = 'inputs'
     # subdir = ''
     # template = args['template']
@@ -68,7 +68,7 @@ def process_dir(root_dir, subdir, template):
 
         utils.setup_dirs(paths)
         output_set = setup_output(paths, template)
-        temp_out = process_files(omr_files, template, args_local, output_set)
+        temp_out = process_files(omr_files, template, args_local, output_set, test_img)
         return temp_out
     # elif(len(subfolders) == 0):
     #     # the directory should have images or be non-leaf
@@ -76,7 +76,7 @@ def process_dir(root_dir, subdir, template):
     #
     # # recursively process subfolders
     for folder in subfolders:
-        var_temp = process_dir(root_dir, os.path.join(subdir, folder), template)
+        var_temp = process_dir(root_dir, os.path.join(subdir, folder), template, test_img)
         return var_temp
 
 
@@ -288,7 +288,7 @@ def preliminary_check():
 
 
 
-def process_files(omr_files, template, args, out):
+def process_files(omr_files, template, args, out, test_img):
     start_time = int(time())
     filesCounter = 0
     filesNotMoved = 0
@@ -308,13 +308,17 @@ def process_files(omr_files, template, args, out):
             continue
         # set global var for reading
 
-        inOMR = cv2.imread(filepath, cv2.IMREAD_GRAYSCALE)
+#         inOMR = cv2.imread(filepath, cv2.IMREAD_GRAYSCALE)
+
+        inOMR = test_img
+        print("OMR>>>>>>>>>>>")
+        print(type(inOMR))
         print(
             '\n[%d] Processing image: \t' %
             (filesCounter),
             filepath,
             "\tResolution: ",
-            inOMR.shape)
+            inOMR)
 
         OMRCrop = utils.getROI(inOMR, filename, noCropping=args["noCropping"])
 

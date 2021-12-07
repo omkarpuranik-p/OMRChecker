@@ -826,6 +826,7 @@ def readResponse(template, image, name, savedir=None, autoAlign=True):
     global clahe
 
     try:
+        print(image)
         img = image.copy()
         origDim = img.shape[:2]
         # print("noCropping dim", origDim)
