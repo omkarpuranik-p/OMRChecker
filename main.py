@@ -42,8 +42,8 @@ def process_dir(root_dir, subdir, template):
         [f for ext in exts for f in glob(os.path.join(curr_dir, ext))])
 
     # Exclude marker image if exists
-    # if(template and template.marker_path):
-    #     omr_files = [f for f in omr_files if f != template.marker_path]
+    if(template and template.marker_path):
+        omr_files = [f for f in omr_files if f != template.marker_path]
 
     subfolders = sorted([file for file in os.listdir(
         curr_dir) if os.path.isdir(os.path.join(curr_dir, file))])
@@ -545,3 +545,4 @@ if args['input_dir'] is None:
 
 # for root in args['input_dir']:
 #     process_dir(root, '', args['template'])
+

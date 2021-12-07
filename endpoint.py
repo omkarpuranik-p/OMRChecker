@@ -1,8 +1,9 @@
 
 # using flask_restful
 from flask import Flask, jsonify, request
-from flask_restful import Resource, Api
+from flask_restful import Resource, Api, reqparse
 from main import process_dir, args
+import werkzeug
 
 # creating the flask app
 app = Flask(__name__)
@@ -10,7 +11,6 @@ app = Flask(__name__)
 api = Api(app)
 
 class OMRResponse(Resource):
-
     def get(self):
         temp_out = process_dir('inputs', '', args['template'])
         return temp_out

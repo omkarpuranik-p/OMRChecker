@@ -102,7 +102,7 @@ def show(name, orig, pause=1, resize=False, resetpos=None):
             cv2.destroyAllWindows()
         return
     origDim = orig.shape[:2]
-    img = resize_util(orig, config.display_width + 95, config.display_height + 150) if resize else orig
+    img = resize_util(orig, config.display_width + 95, config.display_height + 60) if resize else orig
     cv2.imshow(name, img)
     if(resetpos):
         windowX = resetpos[0]
@@ -129,7 +129,7 @@ def show(name, orig, pause=1, resize=False, resetpos=None):
             "Showing '" +
             name +
             "'\n\tPress Q on image to continue Press Ctrl + C in terminal to exit")
-        # waitQ()
+#         waitQ()
 
 
 def putLabel(img, label, size):

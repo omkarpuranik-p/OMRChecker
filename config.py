@@ -11,8 +11,8 @@ Constants
 """
 display_height = int(640)
 display_width = int(640)
-windowWidth = 1250
-windowHeight = 780
+windowWidth = 1280
+windowHeight = 720
 
 saveMarked = 1
 saveCropped = 1
@@ -29,7 +29,7 @@ MULTI_BUBBLE_WARN = 15
 
 # name of template file
 TEMPLATE_FILE = 'template.json'
-MARKER_FILE = "omr_marker.jpg"
+MARKER_FILE = "omr_marker.png"
 
 # For preProcessing
 GAMMA_LOW = 0.7
