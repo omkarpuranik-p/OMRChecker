@@ -318,7 +318,7 @@ def process_files(omr_files, template, args, out, test_img):
             "\tResolution: ",
             inOMR)
 
-        OMRCrop = utils.getROI(inOMR, filename, noCropping=args["noCropping"])
+        OMRCrop = utils.getROI(inOMR, filename, noCropping=True)
 
         if(OMRCrop is None):
             # Error OMR - could not crop
@@ -350,7 +350,7 @@ def process_files(omr_files, template, args, out, test_img):
         savedir = out.paths.saveMarkedDir
         OMRresponseDict, final_marked, MultiMarked, multiroll = \
             utils.readResponse(template, OMRCrop, name=file_id,
-                         savedir=savedir, autoAlign=args["autoAlign"])
+                         savedir=savedir, autoAlign=True)
 
         # concatenate roll nos, set unmarked responses, etc
         # Required JSON
@@ -502,14 +502,14 @@ argparser = argparse.ArgumentParser()
 argparser.add_argument(
     "-c",
     "--noCropping",
-    required=True,
+    required=False,
     dest='noCropping',
     action='store_true',
     help="Disables page contour detection - used when page boundary is not visible e.g. document scanner.")
 argparser.add_argument(
     "-a",
     "--autoAlign",
-    required=True,
+    required=False,
     dest='autoAlign',
     action='store_true',
     help="(experimental) Enables automatic template alignment - use if the scans show slight misalignments.")
@@ -534,6 +534,7 @@ argparser.add_argument(
 
 args, unknown = argparser.parse_known_args()
 args = vars(args)
+
 if(len(unknown) > 0):
     print("\nError: Unknown arguments:", unknown)
     argparser.print_help()
