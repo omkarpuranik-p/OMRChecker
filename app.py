@@ -25,4 +25,4 @@ class UploadImage(Resource):
 api.add_resource(UploadImage, '/upload')
 
 
-app.run(debug = False)
+# app.run(debug = False)
