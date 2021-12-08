@@ -25,5 +25,4 @@ class UploadImage(Resource):
 api.add_resource(UploadImage, '/upload')
 
 
-port = int(os.environ.get("PORT", 5000))
-app.run(host='0.0.0.0', port=port, debug=False)
+app.run(debug = False)
