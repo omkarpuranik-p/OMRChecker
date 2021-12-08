@@ -8,7 +8,7 @@ https://github.com/Udayraj123
 import re
 import os
 import cv2
-import argparse
+# import argparse
 import numpy as np
 import pandas as pd
 
@@ -24,7 +24,7 @@ from glob import glob
 from csv import QUOTE_NONNUMERIC
 from time import time
 
-def process_dir(root_dir, subdir, template, test_img):
+def process_dir(root_dir, subdir, test_img):
     # root_dir = 'inputs'
     # subdir = ''
     # template = args['template']
@@ -32,11 +32,11 @@ def process_dir(root_dir, subdir, template, test_img):
 
     # Look for template in current dir
     template_file = os.path.join(curr_dir, config.TEMPLATE_FILE)
-    if os.path.exists(template_file):
-        template = Template(template_file)
+    template = Template(template_file)
 
     # look for images in current dir to process
-    paths = config.Paths(os.path.join(args['output_dir'], subdir))
+    paths = config.Paths(os.path.join('outputs', subdir))
+    print('PATH>>>>>', paths)
     exts = ('*.png', '*.jpg', '*.jpeg')
     omr_files = sorted(
         [f for ext in exts for f in glob(os.path.join(curr_dir, ext))])
@@ -48,18 +48,18 @@ def process_dir(root_dir, subdir, template, test_img):
     subfolders = sorted([file for file in os.listdir(
         curr_dir) if os.path.isdir(os.path.join(curr_dir, file))])
     if omr_files:
-        args_local = args.copy()
-        if("OverrideFlags" in template.options):
-            args_local.update(template.options["OverrideFlags"])
-        print('\n------------------------------------------------------------------')
-        print(f'Processing directory "{curr_dir}" with settings- ')
-        print("\tTotal images       : %d" % (len(omr_files)))
-        print("\tCropping Enabled   : " + str(not args_local["noCropping"]))
-        print("\tAuto Alignment     : " + str(args_local["autoAlign"]))
-        print("\tUsing Template     : " + str(template.path) if(template) else "N/A")
-        print("\tUsing Marker       : " + str(template.marker_path)
-              if(template.marker is not None) else "N/A")
-        print('')
+#         args_local = args.copy()
+#         if("OverrideFlags" in template.options):
+#             args_local.update(template.options["OverrideFlags"])
+#         print('\n------------------------------------------------------------------')
+#         print(f'Processing directory "{curr_dir}" with settings- ')
+#         print("\tTotal images       : %d" % (len(omr_files)))
+#         print("\tCropping Enabled   : " + str(not args_local["noCropping"]))
+#         print("\tAuto Alignment     : " + str(args_local["autoAlign"]))
+#         print("\tUsing Template     : " + str(template.path) if(template) else "N/A")
+#         print("\tUsing Marker       : " + str(template.marker_path)
+#               if(template.marker is not None) else "N/A")
+#         print('')
 
         # if not template:
         #     print(f'Error: No template file when processing {curr_dir}.')
@@ -67,8 +67,8 @@ def process_dir(root_dir, subdir, template, test_img):
         #     return
 
         utils.setup_dirs(paths)
-        output_set = setup_output(paths, template)
-        temp_out = process_files(omr_files, template, args_local, output_set, test_img)
+#         output_set = setup_output(paths, template)
+        temp_out = process_files(omr_files, template, test_img)
         return temp_out
     # elif(len(subfolders) == 0):
     #     # the directory should have images or be non-leaf
@@ -76,7 +76,7 @@ def process_dir(root_dir, subdir, template, test_img):
     #
     # # recursively process subfolders
     for folder in subfolders:
-        var_temp = process_dir(root_dir, os.path.join(subdir, folder), template, test_img)
+        var_temp = process_dir(root_dir, os.path.join(subdir, folder), test_img)
         return var_temp
 
 
@@ -225,42 +225,47 @@ def evaluate(resp, squad="H", explain=False):
     return marks
 
 
-def setup_output(paths, template):
-    ns = argparse.Namespace()
-    print("\nChecking Files...")
-
-    # Include current output paths
-    ns.paths = paths
-
-    # custom sort: To use integer order in question names instead of
-    # alphabetical - avoids q1, q10, q2 and orders them q1, q2, ..., q10
-    ns.respCols = sorted(list(template.concats.keys()) + template.singles,
-                         key=lambda x: int(x[1:]) if ord(x[1]) in range(48, 58) else 0)
-    ns.emptyResp = [''] * len(ns.respCols)
-    ns.sheetCols = ['file_id', 'input_path',
-                    'output_path', 'score'] + ns.respCols
-    ns.OUTPUT_SET = []
-    ns.filesObj = {}
-    ns.filesMap = {
-        "Results": paths.resultDir + 'Results.csv'
-        # "MultiMarked": paths.manualDir + 'MultiMarkedFiles_.csv',
-        # "Errors": paths.manualDir + 'ErrorFiles_.csv',
-        # "BadRollNos": paths.manualDir + 'BadRollNoFiles_.csv'
-    }
-
-    for fileKey, fileName in ns.filesMap.items():
-        if(not os.path.exists(fileName)):
-            print("Note: Created new file: %s" % (fileName))
-            # still append mode req [THINK!]
-            ns.filesObj[fileKey] = open(fileName, 'a')
-            # Create Header Columns
-            pd.DataFrame([ns.sheetCols], dtype=str).to_csv(
-                ns.filesObj[fileKey], quoting=QUOTE_NONNUMERIC, header=False, index=False)
-        else:
-            print('Present : appending to %s' % (fileName))
-            ns.filesObj[fileKey] = open(fileName, 'a')
-
-    return ns
+# def setup_output(paths, template):
+#     class Namespace(object):
+#         pass
+#
+#     namespaceA = Namespace()
+#
+#     ns = Namespace()
+#     print("\nChecking Files...")
+#
+#     # Include current output paths
+#     ns.paths = paths
+#
+#     # custom sort: To use integer order in question names instead of
+#     # alphabetical - avoids q1, q10, q2 and orders them q1, q2, ..., q10
+#     ns.respCols = sorted(list(template.concats.keys()) + template.singles,
+#                          key=lambda x: int(x[1:]) if ord(x[1]) in range(48, 58) else 0)
+#     ns.emptyResp = [''] * len(ns.respCols)
+#     ns.sheetCols = ['file_id', 'input_path',
+#                     'output_path', 'score'] + ns.respCols
+#     ns.OUTPUT_SET = []
+#     ns.filesObj = {}
+#     ns.filesMap = {
+#         "Results": paths.resultDir + 'Results.csv'
+#         # "MultiMarked": paths.manualDir + 'MultiMarkedFiles_.csv',
+#         # "Errors": paths.manualDir + 'ErrorFiles_.csv',
+#         # "BadRollNos": paths.manualDir + 'BadRollNoFiles_.csv'
+#     }
+#
+#     for fileKey, fileName in ns.filesMap.items():
+#         if(not os.path.exists(fileName)):
+#             print("Note: Created new file: %s" % (fileName))
+#             # still append mode req [THINK!]
+#             ns.filesObj[fileKey] = open(fileName, 'a')
+#             # Create Header Columns
+#             pd.DataFrame([ns.sheetCols], dtype=str).to_csv(
+#                 ns.filesObj[fileKey], quoting=QUOTE_NONNUMERIC, header=False, index=False)
+#         else:
+#             print('Present : appending to %s' % (fileName))
+#             ns.filesObj[fileKey] = open(fileName, 'a')
+#
+#     return ns
 
 
 ''' TODO: Refactor into new process flow.
@@ -288,7 +293,7 @@ def preliminary_check():
 
 
 
-def process_files(omr_files, template, args, out, test_img):
+def process_files(omr_files, template, test_img):
     start_time = int(time())
     filesCounter = 0
     filesNotMoved = 0
@@ -320,37 +325,37 @@ def process_files(omr_files, template, args, out, test_img):
 
         OMRCrop = utils.getROI(inOMR, filename, noCropping=True)
 
-        if(OMRCrop is None):
-            # Error OMR - could not crop
-            newfilepath = out.paths.errorsDir + filename
-            out.OUTPUT_SET.append([filename] + out.emptyResp)
-            if(checkAndMove(config.NO_MARKER_ERR, filepath, newfilepath)):
-                err_line = [filename, filepath,
-                            newfilepath, "NA"] + out.emptyResp
-                pd.DataFrame(
-                    err_line,
-                    dtype=str).T.to_csv(
-                    out.filesObj["Errors"],
-                    quoting=QUOTE_NONNUMERIC,
-                    header=False,
-                    index=False)
-            continue
+#         if(OMRCrop is None):
+#             # Error OMR - could not crop
+#             newfilepath = out.paths.errorsDir + filename
+#             out.OUTPUT_SET.append([filename] + out.emptyResp)
+#             if(checkAndMove(config.NO_MARKER_ERR, filepath, newfilepath)):
+#                 err_line = [filename, filepath,
+#                             newfilepath, "NA"] + out.emptyResp
+#                 pd.DataFrame(
+#                     err_line,
+#                     dtype=str).T.to_csv(
+#                     out.filesObj["Errors"],
+#                     quoting=QUOTE_NONNUMERIC,
+#                     header=False,
+#                     index=False)
+#             continue
 
         if template.marker is not None:
             OMRCrop = utils.handle_markers(OMRCrop, template.marker, filename)
 
-        if(args["setLayout"]):
-            templateLayout = utils.drawTemplateLayout(
-                OMRCrop, template, shifted=False, border=2)
-            utils.show("Template Layout", templateLayout, 1, 1)
-            continue
+#         if(args["setLayout"]):
+#             templateLayout = utils.drawTemplateLayout(
+#                 OMRCrop, template, shifted=False, border=2)
+#             utils.show("Template Layout", templateLayout, 1, 1)
+#             continue
 
         # uniquify
         file_id = inputFolderName + '_' + filename
-        savedir = out.paths.saveMarkedDir
+        savedir = 'outputs'
         OMRresponseDict, final_marked, MultiMarked, multiroll = \
             utils.readResponse(template, OMRCrop, name=file_id,
-                         savedir=savedir, autoAlign=args["autoAlign"])
+                         savedir=savedir, autoAlign=True)
 
         # concatenate roll nos, set unmarked responses, etc
         # Required JSON
@@ -376,13 +381,13 @@ def process_files(omr_files, template, args, out, test_img):
         # # Enter into Results sheet-
         results_line = [filename, filepath, newfilepath, score] + respArray
         # Write/Append to results_line file(opened in append mode)
-        pd.DataFrame(
-            results_line,
-            dtype=str).T.to_csv(
-            out.filesObj["Results"],
-            quoting=QUOTE_NONNUMERIC,
-            header=False,
-            index=False)
+#         pd.DataFrame(
+#             results_line,
+#             dtype=str).T.to_csv(
+#             out.filesObj["Results"],
+#             quoting=QUOTE_NONNUMERIC,
+#             header=False,
+#             index=False)
         # print("[%d] Graded with score: %.2f" %
         #       (filesCounter, score), '\t file_id: ', file_id)
             # print(filesCounter,file_id,resp['Roll'],'score : ',score)
@@ -405,21 +410,21 @@ def process_files(omr_files, template, args, out, test_img):
         #     #     pass
 
         # flush after every 20 files for a live view
-        if(filesCounter % 20 == 0 or filesCounter == len(omr_files)):
-            for fileKey in out.filesMap.keys():
-                out.filesObj[fileKey].flush()
+#         if(filesCounter % 20 == 0 or filesCounter == len(omr_files)):
+#             for fileKey in out.filesMap.keys():
+#                 out.filesObj[fileKey].flush()
 
-    timeChecking = round(time() - start_time, 2) if filesCounter else 1
-    print('')
-    print('Total files moved        : %d ' % (filesMoved))
-    print('Total files not moved    : %d ' % (filesNotMoved))
-    print('------------------------------')
-    print(
-        'Total files processed    : %d (%s)' %
-        (filesCounter,
-         'Sum Tallied!' if filesCounter == (
-             filesMoved +
-             filesNotMoved) else 'Not Tallying!'))
+#     timeChecking = round(time() - start_time, 2) if filesCounter else 1
+#     print('')
+#     print('Total files moved        : %d ' % (filesMoved))
+#     print('Total files not moved    : %d ' % (filesNotMoved))
+#     print('------------------------------')
+#     print(
+#         'Total files processed    : %d (%s)' %
+#         (filesCounter,
+#          'Sum Tallied!' if filesCounter == (
+#              filesMoved +
+#              filesNotMoved) else 'Not Tallying!'))
 
     # if(config.showimglvl <= 0):
     #     print(
@@ -493,59 +498,59 @@ def evaluate_correctness(template, out):
             print("Missing File-ids: ",
                   list(x_df.index.difference(intersection)))
 
-
-# construct the argument parse and parse the arguments
-argparser = argparse.ArgumentParser()
-# https://docs.python.org/3/howto/argparse.html
-# store_true: if the option is specified, assign the value True to
-# args.verbose. Not specifying it implies False.
-argparser.add_argument(
-    "-c",
-    "--noCropping",
-    required=False,
-    dest='noCropping',
-    action='store_true',
-    help="Disables page contour detection - used when page boundary is not visible e.g. document scanner.")
-argparser.add_argument(
-    "-a",
-    "--autoAlign",
-    required=False,
-    dest='autoAlign',
-    action='store_true',
-    help="(experimental) Enables automatic template alignment - use if the scans show slight misalignments.")
-argparser.add_argument(
-    "-l",
-    "--setLayout",
-    required=False,
-    dest='setLayout',
-    action='store_true',
-    help="Set up OMR template layout - modify your json file and run again until the template is set.")
-argparser.add_argument("-i", "--inputDir", required=False, action='append',
-                       dest='input_dir', help="Specify an input directory.")
-argparser.add_argument("-o", "--outputDir", default='outputs', required=False,
-                       dest='output_dir', help="Specify an output directory.")
-argparser.add_argument(
-    "-t",
-    "--template",
-    required=False,
-    dest='template',
-    help="Specify a default template if no template file in input directories.")
-
-
-args, unknown = argparser.parse_known_args()
-args = vars(args)
-
-if(len(unknown) > 0):
-    print("\nError: Unknown arguments:", unknown)
-    argparser.print_help()
-    exit(11)
-
-if args['template']:
-    args['template'] = Template(args['template'])
-
-if args['input_dir'] is None:
-    args['input_dir'] = ['inputs']
-
-# for root in args['input_dir']:
-#     process_dir(root, '', args['template'])
-
+#
+# # construct the argument parse and parse the arguments
+# argparser = argparse.ArgumentParser()
+# # https://docs.python.org/3/howto/argparse.html
+# # store_true: if the option is specified, assign the value True to
+# # args.verbose. Not specifying it implies False.
+# argparser.add_argument(
+#     "-c",
+#     "--noCropping",
+#     required=False,
+#     dest='noCropping',
+#     action='store_true',
+#     help="Disables page contour detection - used when page boundary is not visible e.g. document scanner.")
+# argparser.add_argument(
+#     "-a",
+#     "--autoAlign",
+#     required=False,
+#     dest='autoAlign',
+#     action='store_true',
+#     help="(experimental) Enables automatic template alignment - use if the scans show slight misalignments.")
+# argparser.add_argument(
+#     "-l",
+#     "--setLayout",
+#     required=False,
+#     dest='setLayout',
+#     action='store_true',
+#     help="Set up OMR template layout - modify your json file and run again until the template is set.")
+# argparser.add_argument("-i", "--inputDir", required=False, action='append',
+#                        dest='input_dir', help="Specify an input directory.")
+# argparser.add_argument("-o", "--outputDir", default='outputs', required=False,
+#                        dest='output_dir', help="Specify an output directory.")
+# argparser.add_argument(
+#     "-t",
+#     "--template",
+#     required=False,
+#     dest='template',
+#     help="Specify a default template if no template file in input directories.")
+#
+#
+# args, unknown = argparser.parse_known_args()
+# args = vars(args)
+#
+# if(len(unknown) > 0):
+#     print("\nError: Unknown arguments:", unknown)
+#     argparser.print_help()
+#     exit(11)
+#
+# if args['template']:
+#     args['template'] = Template(args['template'])
+#
+# if args['input_dir'] is None:
+#     args['input_dir'] = ['inputs']
+#
+# # for root in args['input_dir']:
+# #     process_dir(root, '', args['template'])
+#

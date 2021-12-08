@@ -25,7 +25,7 @@ plt.rcParams['figure.figsize'] = (10.0, 8.0)
 
 from pathlib import Path
 from random import randint
-from imutils import grab_contours
+# from imutils import grab_contours
 # from skimage.filters import threshold_adaptive
 
 import config
@@ -345,69 +345,69 @@ def appendSaveImg(key, img):
         saveImgList[key].append(img.copy())
 
 
-def findPage(image_norm):
-    # Done: find ORIGIN for the quadrants
-    # Done, Auto tune! : Get canny parameters tuned
-    # (https://www.pyimagesearch.com/2015/04/06/zero-parameter-automatic-canny-edge-detection-with-python-and-opencv/)
-
-    image_norm = normalize_util(image_norm)
-    ret, image_norm = cv2.threshold(image_norm, 210, 255, cv2.THRESH_TRUNC)
-    image_norm = normalize_util(image_norm)
-
-    appendSaveImg(1, image_norm)
-
-    # kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 10))
-    kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (10, 10))
-    """
-    # Closing is reverse of Opening, Dilation followed by Erosion.
-    A pixel in the original image (either 1 or 0) will be considered 1 only if all the pixels
-    under the kernel is 1, otherwise it is eroded (made to zero).
-    """
-    # Close the small holes, i.e. Complete the edges on canny image
-    closed = cv2.morphologyEx(image_norm, cv2.MORPH_CLOSE, kernel)
-
-    appendSaveImg(1, closed)
-
-    edge = cv2.Canny(closed, 185, 55)
-
-    # findContours returns outer boundaries in CW and inner boundaries in ACW
-    # order.
-    cnts = grab_contours(
-        cv2.findContours(
-            edge,
-            cv2.RETR_LIST,
-            cv2.CHAIN_APPROX_SIMPLE))
-    # hullify to resolve disordered curves due to noise
-    cnts = [cv2.convexHull(c) for c in cnts]
-    cnts = sorted(cnts, key=cv2.contourArea, reverse=True)[:5]
-    sheet = []
-    for c in cnts:
-        if cv2.contourArea(c) < config.MIN_PAGE_AREA:
-            continue
-        peri = cv2.arcLength(c, True)
-        # ez algo -
-        # https://en.wikipedia.org/wiki/Ramer–Douglas–Peucker_algorithm
-        approx = cv2.approxPolyDP(c, epsilon=0.025 * peri, closed=True)
-        # print("Area",cv2.contourArea(c), "Peri", peri)
-
-        # check its rectangle-ness:
-        if(validateRect(approx)):
-            sheet = np.reshape(approx, (4, -1))
-            cv2.drawContours(image_norm, [approx], -1, (0, 255, 0), 2)
-            cv2.drawContours(edge, [approx], -1, (255, 255, 255), 10)
-            break
-        # box = perspective.order_points(box)
-    # sobel = cv2.addWeighted(cv2.Sobel(edge, cv2.CV_64F, 1, 0, ksize=3),0.5,cv2.Sobel(edge, cv2.CV_64F, 0, 1, ksize=3),0.5,0,edge)
-    # ExcessDo : make it work on killer images
-    # edge2 = auto_canny(image_norm)
-    # show('Morphed Edges',np.hstack((closed,edge)),1,1)
-
-    appendSaveImg(1, edge)
-    if(sheet ==  []):
-        print("\tError: Paper boundary not found! Should you pass --noCropping flag?")
-        if(config.showimglvl >= 4):
-            show('Morphed Edges', np.hstack((closed,edge)),resize =1)
-    return sheet
+# def findPage(image_norm):
+#     # Done: find ORIGIN for the quadrants
+#     # Done, Auto tune! : Get canny parameters tuned
+#     # (https://www.pyimagesearch.com/2015/04/06/zero-parameter-automatic-canny-edge-detection-with-python-and-opencv/)
+#
+#     image_norm = normalize_util(image_norm)
+#     ret, image_norm = cv2.threshold(image_norm, 210, 255, cv2.THRESH_TRUNC)
+#     image_norm = normalize_util(image_norm)
+#
+#     appendSaveImg(1, image_norm)
+#
+#     # kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 10))
+#     kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (10, 10))
+#     """
+#     # Closing is reverse of Opening, Dilation followed by Erosion.
+#     A pixel in the original image (either 1 or 0) will be considered 1 only if all the pixels
+#     under the kernel is 1, otherwise it is eroded (made to zero).
+#     """
+#     # Close the small holes, i.e. Complete the edges on canny image
+#     closed = cv2.morphologyEx(image_norm, cv2.MORPH_CLOSE, kernel)
+#
+#     appendSaveImg(1, closed)
+#
+#     edge = cv2.Canny(closed, 185, 55)
+#
+#     # findContours returns outer boundaries in CW and inner boundaries in ACW
+#     # order.
+#     cnts = grab_contours(
+#         cv2.findContours(
+#             edge,
+#             cv2.RETR_LIST,
+#             cv2.CHAIN_APPROX_SIMPLE))
+#     # hullify to resolve disordered curves due to noise
+#     cnts = [cv2.convexHull(c) for c in cnts]
+#     cnts = sorted(cnts, key=cv2.contourArea, reverse=True)[:5]
+#     sheet = []
+#     for c in cnts:
+#         if cv2.contourArea(c) < config.MIN_PAGE_AREA:
+#             continue
+#         peri = cv2.arcLength(c, True)
+#         # ez algo -
+#         # https://en.wikipedia.org/wiki/Ramer–Douglas–Peucker_algorithm
+#         approx = cv2.approxPolyDP(c, epsilon=0.025 * peri, closed=True)
+#         # print("Area",cv2.contourArea(c), "Peri", peri)
+#
+#         # check its rectangle-ness:
+#         if(validateRect(approx)):
+#             sheet = np.reshape(approx, (4, -1))
+#             cv2.drawContours(image_norm, [approx], -1, (0, 255, 0), 2)
+#             cv2.drawContours(edge, [approx], -1, (255, 255, 255), 10)
+#             break
+#         # box = perspective.order_points(box)
+#     # sobel = cv2.addWeighted(cv2.Sobel(edge, cv2.CV_64F, 1, 0, ksize=3),0.5,cv2.Sobel(edge, cv2.CV_64F, 0, 1, ksize=3),0.5,0,edge)
+#     # ExcessDo : make it work on killer images
+#     # edge2 = auto_canny(image_norm)
+#     # show('Morphed Edges',np.hstack((closed,edge)),1,1)
+#
+#     appendSaveImg(1, edge)
+#     if(sheet ==  []):
+#         print("\tError: Paper boundary not found! Should you pass --noCropping flag?")
+#         if(config.showimglvl >= 4):
+#             show('Morphed Edges', np.hstack((closed,edge)),resize =1)
+#     return sheet
 
 
 # Resizing the marker within scaleRange at rate of descent_per_step to
@@ -496,19 +496,19 @@ def getROI(image, filename, noCropping=True):
     img = cv2.GaussianBlur(img, (3, 3), 0)
     image_norm = normalize_util(img)
 
-    if(noCropping == False):
-        # Need this resize for arbitrary high res images: before passing to
-        # findPage
-        if(image_norm.shape[1] > config.uniform_width * 2):
-            image_norm = resize_util(image_norm, config.uniform_width * 2)
-        sheet = findPage(image_norm)
-        if sheet == []:
-            return None
-        else:
-            print("Found page corners: \t", sheet.tolist())
-
-        # Warp layer 1
-        image_norm = four_point_transform(image_norm, sheet)
+#     if(noCropping == False):
+#         # Need this resize for arbitrary high res images: before passing to
+#         # findPage
+#         if(image_norm.shape[1] > config.uniform_width * 2):
+#             image_norm = resize_util(image_norm, config.uniform_width * 2)
+#         sheet = findPage(image_norm)
+#         if sheet == []:
+#             return None
+#         else:
+#             print("Found page corners: \t", sheet.tolist())
+#
+#         # Warp layer 1
+#         image_norm = four_point_transform(image_norm, sheet)
 
     # Resize only after cropping the page for clarity as well as uniformity
     # for non noCropping images
