@@ -15,7 +15,8 @@ api = Api(app)
 
 class UploadImage(Resource):
     def post(self):
-        test_img = cv2.imdecode(numpy.fromstring(request.files['file'].read(), numpy.uint8), cv2.IMREAD_GRAYSCALE)
+        print(cv2.__version__)
+        test_img = cv2.imdecode(numpy.frombuffer(request.files['file'].read(), numpy.uint8), cv2.IMREAD_GRAYSCALE)
         temp_out = process_dir('inputs', '', args['template'], test_img)
         print("IMAGE RESPONSE>>>>>", temp_out)
         return temp_out

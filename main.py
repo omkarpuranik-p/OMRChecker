@@ -311,8 +311,6 @@ def process_files(omr_files, template, args, out, test_img):
 #         inOMR = cv2.imread(filepath, cv2.IMREAD_GRAYSCALE)
 
         inOMR = test_img
-        print("OMR>>>>>>>>>>>")
-        print(type(inOMR))
         print(
             '\n[%d] Processing image: \t' %
             (filesCounter),
