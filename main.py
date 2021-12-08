@@ -350,7 +350,7 @@ def process_files(omr_files, template, args, out, test_img):
         savedir = out.paths.saveMarkedDir
         OMRresponseDict, final_marked, MultiMarked, multiroll = \
             utils.readResponse(template, OMRCrop, name=file_id,
-                         savedir=savedir, autoAlign=True)
+                         savedir=savedir, autoAlign=args["autoAlign"])
 
         # concatenate roll nos, set unmarked responses, etc
         # Required JSON

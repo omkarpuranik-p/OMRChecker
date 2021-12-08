@@ -468,7 +468,7 @@ badThresholds = []
 veryBadPoints = []
 
 
-def getROI(image, filename, noCropping=False):
+def getROI(image, filename, noCropping=True):
     global clahe
     for i in range(config.saveimglvl):
         resetSaveImg(i + 1)
