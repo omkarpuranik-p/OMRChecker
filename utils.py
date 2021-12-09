@@ -11,7 +11,7 @@ import json
 saveImgList = {}
 resetpos = [0,0]
 # for positioning image windows
-windowX,windowY = 0,0 
+windowX,windowY = 0,0
 
 import re
 import os
@@ -180,17 +180,17 @@ def drawTemplateLayout(
                     cv2.putText(final_align,
                                 '%d'% (cv2.mean(img[rect[0]:rect[1], rect[2]:rect[3]])[0]),
                                 (rect[2] + 2, rect[0] + (boxH * 2) // 3),
-                                cv2.FONT_HERSHEY_SIMPLEX, 
-                                0.6, 
+                                cv2.FONT_HERSHEY_SIMPLEX,
+                                0.6,
                                 config.CLR_BLACK,
                                 2)
         if(shifted):
             cv2.putText(final_align,
-                        's%s'% (shift), 
+                        's%s'% (shift),
                         tuple(s - [template.dims[0] // 20, -d[1] // 2]),
-                        cv2.FONT_HERSHEY_SIMPLEX, 
-                        config.TEXT_SIZE, 
-                        config.CLR_BLACK, 
+                        cv2.FONT_HERSHEY_SIMPLEX,
+                        config.TEXT_SIZE,
+                        config.CLR_BLACK,
                         4)
     return final_align
 
@@ -929,7 +929,7 @@ def readResponse(template, image, name, savedir=None, autoAlign=True):
                 while steps < ALIGN_STEPS:
                     L = np.mean(morph_v[s[1]:s[1]+d[1],s[0]+shift-THK:-THK+s[0]+shift+MATCH_COL])
                     R = np.mean(morph_v[s[1]:s[1]+d[1],s[0]+shift-MATCH_COL+d[0]+THK:THK+s[0]+shift+d[0]])
-                    
+
                     # For demonstration purposes-
                     if(QBlock.key == "Int1"):
                         ret = morph_v.copy()
@@ -1075,7 +1075,7 @@ def readResponse(template, image, name, savedir=None, autoAlign=True):
                                       (int(x+boxW/12),
                                       int(y+boxH/12)),
                                       (int(x+boxW-boxW/12), int(y+boxH-boxH/12)),
-                                      config.CLR_DARK_GRAY, 
+                                      config.CLR_DARK_GRAY,
                                       3)
                     else:
                         cv2.rectangle(final_marked,
@@ -1090,7 +1090,7 @@ def readResponse(template, image, name, savedir=None, autoAlign=True):
                         cv2.putText(final_marked,
                                     val,
                                     (x, y),
-                                    cv2.FONT_HERSHEY_SIMPLEX, 
+                                    cv2.FONT_HERSHEY_SIMPLEX,
                                     config.TEXT_SIZE,
                                     (20, 20, 10),
                                     int(1 + 3.5*config.TEXT_SIZE))

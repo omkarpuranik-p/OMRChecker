@@ -24,19 +24,22 @@ from glob import glob
 from csv import QUOTE_NONNUMERIC
 from time import time
 
-def process_dir(root_dir, subdir, test_img):
-    # root_dir = 'inputs'
-    # subdir = ''
-    # template = args['template']
+def process_dir(root_dir, subdir, templateCode, test_img):
     curr_dir = os.path.join(root_dir, subdir)
 
+    if int(templateCode, 10) == 150:
+        fileUrl = config.TEMPLATE_FILE_150
+    elif int(templateCode, 10) == 75:
+        fileUrl = config.TEMPLATE_FILE_75
+    else:
+        fileUrl = config.TEMPLATE_FILE_180
+
     # Look for template in current dir
-    template_file = os.path.join(curr_dir, config.TEMPLATE_FILE)
+    template_file = os.path.join(curr_dir, fileUrl)
     template = Template(template_file)
 
     # look for images in current dir to process
     paths = config.Paths(os.path.join('outputs', subdir))
-    print('PATH>>>>>', paths)
     exts = ('*.png', '*.jpg', '*.jpeg')
     omr_files = sorted(
         [f for ext in exts for f in glob(os.path.join(curr_dir, ext))])
@@ -48,35 +51,13 @@ def process_dir(root_dir, subdir, test_img):
     subfolders = sorted([file for file in os.listdir(
         curr_dir) if os.path.isdir(os.path.join(curr_dir, file))])
     if omr_files:
-#         args_local = args.copy()
-#         if("OverrideFlags" in template.options):
-#             args_local.update(template.options["OverrideFlags"])
-#         print('\n------------------------------------------------------------------')
-#         print(f'Processing directory "{curr_dir}" with settings- ')
-#         print("\tTotal images       : %d" % (len(omr_files)))
-#         print("\tCropping Enabled   : " + str(not args_local["noCropping"]))
-#         print("\tAuto Alignment     : " + str(args_local["autoAlign"]))
-#         print("\tUsing Template     : " + str(template.path) if(template) else "N/A")
-#         print("\tUsing Marker       : " + str(template.marker_path)
-#               if(template.marker is not None) else "N/A")
-#         print('')
-
-        # if not template:
-        #     print(f'Error: No template file when processing {curr_dir}.')
-        #     print(f'  Place {config.TEMPLATE_FILE} in the directory or specify a template using -t.')
-        #     return
-
         utils.setup_dirs(paths)
 #         output_set = setup_output(paths, template)
         temp_out = process_files(omr_files, template, test_img)
         return temp_out
-    # elif(len(subfolders) == 0):
-    #     # the directory should have images or be non-leaf
-    #     print(f'Note: No valid images or subfolders found in {curr_dir}')
-    #
-    # # recursively process subfolders
+
     for folder in subfolders:
-        var_temp = process_dir(root_dir, os.path.join(subdir, folder), test_img)
+        var_temp = process_dir(root_dir, os.path.join(subdir, folder), templateCode, test_img)
         return var_temp
 
 
