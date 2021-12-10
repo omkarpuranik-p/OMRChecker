@@ -21,9 +21,12 @@ class UploadImage(Resource):
         print("IMAGE RESPONSE>>>>>", temp_out)
         return temp_out
 
+class HeathCheck(Resource):
+    def get(self):
+        return {'message': 'Healthy'}
 
 # adding the defined resources along with their corresponding urls
 api.add_resource(UploadImage, '/upload')
+api.add_resource(HeathCheck, '/health')
 
-
-app.run(debug = False)
+app.run(port=9999)
