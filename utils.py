@@ -20,8 +20,8 @@ import cv2
 import glob
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
-plt.rcParams['figure.figsize'] = (10.0, 8.0)
+# import matplotlib.pyplot as plt
+# plt.rcParams['figure.figsize'] = (10.0, 8.0)
 
 from pathlib import Path
 from random import randint
@@ -442,8 +442,8 @@ def getBestMatch(image_eroded_sub, marker):
 
     if(allMaxT < config.thresholdCircle):
         print("\tWarning: Template matching too low! Should you pass --noCropping flag?")
-        if(config.showimglvl>=1):
-            show("res", res, 1, 0)
+#         if(config.showimglvl>=1):
+#             show("res", res, 1, 0)
 
     if(best_scale is None):
         print("No matchings for given scaleRange:", config.marker_rescale_range)
@@ -544,11 +544,11 @@ def handle_markers(image_norm, marker, curr_filename):
     image_eroded_sub[midh:midh + 2, :] = 255
 
     best_scale, allMaxT = getBestMatch(image_eroded_sub, marker)
-    if(best_scale is None):
+#     if(best_scale is None):
         # TODO: Plot and see performance of marker_rescale_range
-        if(config.showimglvl >= 1):
-            show('Quads', image_eroded_sub)
-        return None
+#         if(config.showimglvl >= 1):
+#             show('Quads', image_eroded_sub)
+#         return None
 
     optimal_marker = resize_util_h(
         marker if config.ERODE_SUB_OFF else marker, u_height=int(
@@ -575,9 +575,9 @@ def handle_markers(image_norm, marker, curr_filename):
                 "allMaxT",
                 allMaxT,
                 "Should you pass --noCropping flag?")
-            if(config.showimglvl >= 1):
-                show("no_pts_" + curr_filename, image_eroded_sub, 0)
-                show("res_Q" + str(k + 1), res, 1)
+#             if(config.showimglvl >= 1):
+#                 show("no_pts_" + curr_filename, image_eroded_sub, 0)
+#                 show("res_Q" + str(k + 1), res, 1)
             return None
 
         pt = np.argwhere(res == maxT)[0]
@@ -620,8 +620,8 @@ def handle_markers(image_norm, marker, curr_filename):
         image_eroded_sub = resize_util_h(image_eroded_sub, image_norm.shape[0])
         image_eroded_sub[:, -5:] = 0
         h_stack = np.hstack((image_eroded_sub, image_norm))
-        show("Warped: " + curr_filename, resize_util(h_stack,
-                                                     int(config.display_width * 1.6)), 0, 0, [0, 0])
+#         show("Warped: " + curr_filename, resize_util(h_stack,
+#                                                      int(config.display_width * 1.6)), 0, 0, [0, 0])
     # iterations : Tuned to 2.
     # image_eroded_sub = image_norm - cv2.erode(image_norm, kernel=np.ones((5,5)),iterations=2)
     return image_norm
@@ -705,7 +705,6 @@ def getGlobalThreshold(
         ax.legend()
         if(plotShow):
             plt.title(plotTitle)
-            plt.show()
 
     return globalTHR, j_low, j_high
 
@@ -795,10 +794,6 @@ def getLocalThreshold(
         ax.set_ylabel("Bubble Mean Intensity")
         ax.set_xlabel("Bubble Number(sorted)")
         ax.legend()
-        # TODO append QStrip to this plot-
-        # appendSaveImg(6,getPlotImg())
-        if(plotShow):
-            plt.show()
     return thr1
 
 # from matplotlib.ticker import MaxNLocator
@@ -853,8 +848,8 @@ def readResponse(template, image, name, savedir=None, autoAlign=True):
             ret, morph = cv2.threshold(morph, 220, 220, cv2.THRESH_TRUNC)
             morph = normalize_util(morph)
             appendSaveImg(3,morph)
-            if(config.showimglvl>=4):
-                show("morph1",morph,0,1)
+#             if(config.showimglvl>=4):
+#                 show("morph1",morph,0,1)
 
         # Overlay Transparencies
         alpha = 0.65
@@ -887,8 +882,8 @@ def readResponse(template, image, name, savedir=None, autoAlign=True):
             ret, morph_v = cv2.threshold(morph_v, 200, 200, cv2.THRESH_TRUNC)
             morph_v = 255 - normalize_util(morph_v)
 
-            if(config.showimglvl >= 3):
-                show("morphed_vertical", morph_v, 0, 1)
+#             if(config.showimglvl >= 3):
+#                 show("morphed_vertical", morph_v, 0, 1)
 
             # show("morph1",morph,0,1)
             # show("morphed_vertical",morph_v,0,1)
@@ -912,8 +907,8 @@ def readResponse(template, image, name, savedir=None, autoAlign=True):
             # show("morph_h",morph_h,0,1)
             # _, morph_h = cv2.threshold(morph_h,morphTHR,255,cv2.THRESH_BINARY)
             # morph_h = cv2.erode(morph_h,  np.ones((5,5),np.uint8), iterations = 2)
-            if(config.showimglvl >= 3):
-                show("morph_thr_eroded", morph_v, 0, 1)
+#             if(config.showimglvl >= 3):
+#                 show("morph_thr_eroded", morph_v, 0, 1)
 
             appendSaveImg(6, morph_v)
 
@@ -1156,7 +1151,7 @@ def readResponse(template, image, name, savedir=None, autoAlign=True):
                 ctr += 1
             # imshow will do the waiting
             plt.tight_layout(pad=0.5)
-            plt.show()
+#             plt.show()
 
         # if(config.showimglvl >= 3 and final_align is not None):
         #     final_align = resize_util_h(final_align, int(config.display_height))
