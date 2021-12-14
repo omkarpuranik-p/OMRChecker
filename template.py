@@ -89,6 +89,10 @@ qtype_data = {
         'vals': range(10),
         'orient': 'V'
     },
+    'QTYPE_CENTRE_ID': {
+        'vals': range(10),
+        'orient': 'V'
+    },
 
     # Add custom question types here-
     # ,

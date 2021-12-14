@@ -31,6 +31,7 @@ MULTI_BUBBLE_WARN = 15
 TEMPLATE_FILE_180 = 'template_180.json'
 TEMPLATE_FILE_150 = 'template_150.json'
 TEMPLATE_FILE_75 = 'template_75.json'
+TEMPLATE_FILE_20= 'template_20.json'
 MARKER_FILE = "omr_marker.png"
 
 # For preProcessing
@@ -84,8 +85,4 @@ class Paths:
         self.output = output
         self.saveMarkedDir = f'{output}/CheckedOMRs/'
         self.resultDir = f'{output}/Results/'
-        # self.manualDir = f'{output}/Manual/'
-        # self.errorsDir = f'{self.manualDir}ErrorFiles/'
-        # self.badRollsDir = f'{self.manualDir}BadRollNosFiles/'
-        # self.multiMarkedDir = f'{self.manualDir}MultiMarkedFiles/'
 
