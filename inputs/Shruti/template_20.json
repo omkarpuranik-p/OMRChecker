@@ -10,7 +10,7 @@
 	"Options": {
 		"Marker": {
 			"RelativePath": "omr_marker.png",
-			"SheetToMarkerWidthRatio": 23
+			"SheetToMarkerWidthRatio": 40
 		}
 	},
 	"Concatenations": {
@@ -93,14 +93,14 @@
 			"qType": "QTYPE_NAME",
 			"orig": [
 				38,
-				128
+				130
 			],
 			"bigGaps": [
 				115,
 				11
 			],
 			"gaps": [
-				37,
+				37.2,
 				21.8
 			],
 			"qNos": [
@@ -144,8 +144,8 @@
 		"MobileNumber": {
 			"qType": "QTYPE_MOBILE_NUMBER",
 			"orig": [
-				1230,
-				137
+				1235,
+				145
 			],
 			"bigGaps": [
 				115,
@@ -154,7 +154,7 @@
 
 			"gaps": [
 				60,
-				22.2
+				22
 			],
 			"qNos": [
 				[
@@ -177,8 +177,8 @@
 	"CentreId": {
 			"qType": "QTYPE_CENTRE_ID",
 			"orig": [
-				1436,
-				475
+				1440,
+				477
 			],
 			"bigGaps": [
 				115,
@@ -186,7 +186,7 @@
 			],
 
 			"gaps": [
-				65,
+				66,
 				22
 			],
 			"qNos": [
@@ -202,15 +202,15 @@
 		"Mcq1": {
 			"qType": "QTYPE_MCQ4",
 			"orig": [
-				1420,
-				825
+				1422,
+				830
 			],
 			"bigGaps": [
 				115,
-				183
+				185
 			],
 			"gaps": [
-				70,
+				72,
 				25
 			],
 
@@ -244,5 +244,6 @@
 		}
 	}
 }
+
 
 
