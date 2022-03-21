@@ -31,6 +31,8 @@ def process_dir(root_dir, subdir, templateCode, test_img):
         fileUrl = config.TEMPLATE_FILE_150
     elif int(templateCode, 10) == 75:
         fileUrl = config.TEMPLATE_FILE_75
+    elif int(templateCode, 10) == 50:
+        fileUrl = config.TEMPLATE_FILE_50
     elif int(templateCode, 10) == 20:
         fileUrl = config.TEMPLATE_FILE_20
     else:
@@ -179,11 +181,11 @@ def process_files(omr_files, template, test_img):
         if template.marker is not None:
             OMRCrop = utils.handle_markers(OMRCrop, template.marker, filename)
 
-#         if(args["setLayout"]):
-#             templateLayout = utils.drawTemplateLayout(
-#                 OMRCrop, template, shifted=False, border=2)
-#             utils.show("Template Layout", templateLayout, 1, 1)
-#             continue
+        # if(args["setLayout"]):
+            # templateLayout = utils.drawTemplateLayout(
+            #     OMRCrop, template, shifted=False, border=2)
+            # utils.show("Template Layout", templateLayout, 1, 1)
+            # continue
 
         # uniquify
         file_id = inputFolderName + '_' + filename

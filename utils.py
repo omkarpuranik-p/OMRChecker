@@ -129,7 +129,7 @@ def show(name, orig, pause=1, resize=False, resetpos=None):
             "Showing '" +
             name +
             "'\n\tPress Q on image to continue Press Ctrl + C in terminal to exit")
-#         waitQ()
+        # waitQ()
 
 
 def putLabel(img, label, size):
