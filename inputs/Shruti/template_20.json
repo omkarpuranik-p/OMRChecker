@@ -4,13 +4,13 @@
 		1500
 	],
 	"BubbleDimensions": [
-		28,
-		17
+		30,
+		22
 	],
 	"Options": {
 		"Marker": {
 			"RelativePath": "omr_marker.png",
-			"SheetToMarkerWidthRatio": 40
+			"SheetToMarkerWidthRatio": 20
 		}
 	},
 	"Concatenations": {
@@ -44,14 +44,23 @@
 			"n27",
 			"n28",
 			"n29",
-			"n30",
-			"n31"
+			"n30"
 		],
-		"CenterId": [
-			"c1",
-			"c2",
-			"c3",
-			"c4"
+		"StudentId": [
+			"s1",
+			"s2",
+			"s3",
+			"s4",
+			"s5",
+			"s6",
+			"s7"
+		],
+		"TestId": [
+			"t1",
+			"t2",
+			"t3",
+			"t4",
+			"t5"
 		],
 		"MobileNumber": [
 			"m1",
@@ -92,16 +101,16 @@
 		"Name": {
 			"qType": "QTYPE_NAME",
 			"orig": [
-				38,
-				130
+				77,
+				60
 			],
 			"bigGaps": [
 				115,
 				11
 			],
 			"gaps": [
-				37.2,
-				21.8
+				34,
+				22.3
 			],
 			"qNos": [
 				[
@@ -135,17 +144,44 @@
 						"n27",
 						"n28",
 						"n29",
-						"n30",
-						"n31"
+						"n30"
 					]
 				]
 			]
 		},
-		"MobileNumber": {
-			"qType": "QTYPE_MOBILE_NUMBER",
+		"StudentId": {
+			"qType": "QTYPE_STUDENT_ID",
 			"orig": [
-				1235,
-				145
+				1135,
+				60
+			],
+			"bigGaps": [
+				115,
+				11
+			],
+			"gaps": [
+				47,
+				22.5
+			],
+			"qNos": [
+				[
+					[
+						"s1",
+						"s2",
+						"s3",
+						"s4",
+						"s5",
+						"s6",
+						"s7"
+					]
+				]
+			]
+		},
+		"TestId": {
+			"qType": "QTYPE_TEST_ID",
+			"orig": [
+				1525,
+				60
 			],
 			"bigGaps": [
 				115,
@@ -153,8 +189,35 @@
 			],
 
 			"gaps": [
-				60,
-				22
+				48,
+				22.5
+			],
+			"qNos": [
+				[
+					[
+						"t1",
+						"t2",
+						"t3",
+						"t4",
+						"t5"
+					]
+				]
+			]
+		},
+		"MobileNumber": {
+			"qType": "QTYPE_MOBILE_NUMBER",
+			"orig": [
+				1230,
+				386
+			],
+			"bigGaps": [
+				115,
+				11
+			],
+
+			"gaps": [
+				50,
+				22.5
 			],
 			"qNos": [
 				[
@@ -174,44 +237,19 @@
 				]
 			]
 		},
-	"CentreId": {
-			"qType": "QTYPE_CENTRE_ID",
-			"orig": [
-				1440,
-				477
-			],
-			"bigGaps": [
-				115,
-				11
-			],
-
-			"gaps": [
-				66,
-				22
-			],
-			"qNos": [
-				[
-					[
-						"c1",
-						"c2",
-						"c3",
-						"c4"					]
-				]
-			]
-		},
 		"Mcq1": {
 			"qType": "QTYPE_MCQ4",
 			"orig": [
-				1422,
-				830
+				172,
+				670
 			],
 			"bigGaps": [
 				115,
-				185
+				183
 			],
 			"gaps": [
-				72,
-				25
+				52,
+				22.5
 			],
 
 			"qNos": [
@@ -221,17 +259,83 @@
 						"q2",
 						"q3",
 						"q4",
-						"q5",
+						"q5"
+					]
+				]
+			]
+		},
+		"Mcq2": {
+			"qType": "QTYPE_MCQ4",
+			"orig": [
+				172,
+				802
+			],
+			"bigGaps": [
+				115,
+				182
+			],
+			"gaps": [
+				52,
+				22.5
+			],
+
+			"qNos": [
+				[
+					[
 						"q6",
 						"q7",
 						"q8",
 						"q9",
-						"q10",
+						"q10"
+					]
+				]
+			]
+		},
+		"Mcq3": {
+			"qType": "QTYPE_MCQ4",
+			"orig": [
+				172,
+				934
+			],
+			"bigGaps": [
+				115,
+				182
+			],
+			"gaps": [
+				52,
+				22.5
+			],
+
+			"qNos": [
+				[
+					[
 						"q11",
 						"q12",
 						"q13",
 						"q14",
-						"q15",
+						"q15"
+					]
+				]
+			]
+		},
+		"Mcq4": {
+			"qType": "QTYPE_MCQ4",
+			"orig": [
+				172,
+				1064
+			],
+			"bigGaps": [
+				115,
+				183
+			],
+			"gaps": [
+				52,
+				22.5
+			],
+
+			"qNos": [
+				[
+					[
 						"q16",
 						"q17",
 						"q18",
@@ -242,8 +346,5 @@
 				]
 			]
 		}
-	}
+					}
 }
-
-
-

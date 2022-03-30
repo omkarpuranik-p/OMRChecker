@@ -33,8 +33,16 @@ def process_dir(root_dir, subdir, templateCode, test_img):
         fileUrl = config.TEMPLATE_FILE_75
     elif int(templateCode, 10) == 50:
         fileUrl = config.TEMPLATE_FILE_50
+    elif int(templateCode, 10) == 201:
+        fileUrl = config.TEMPLATE_FILE_20_QUIZ
+    elif int(templateCode, 10) == 40:
+        fileUrl = config.TEMPLATE_FILE_40
+    elif int(templateCode, 10) == 30:
+        fileUrl = config.TEMPLATE_FILE_30
     elif int(templateCode, 10) == 20:
         fileUrl = config.TEMPLATE_FILE_20
+    elif int(templateCode, 10) == 10:
+        fileUrl = config.TEMPLATE_FILE_10
     else:
         fileUrl = config.TEMPLATE_FILE_180
 
