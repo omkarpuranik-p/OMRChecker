@@ -38,6 +38,7 @@ TEMPLATE_FILE_20_QUIZ= 'template_20_quiz.json'
 TEMPLATE_FILE_30= 'template_30.json'
 TEMPLATE_FILE_40= 'template_40.json'
 TEMPLATE_FILE_45 = 'template_45.json'
+TEMPLATE_FILE_100 = 'template_100.json'
 MARKER_FILE = "omr_marker.png"
 
 # For preProcessing
